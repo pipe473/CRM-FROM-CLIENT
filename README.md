@@ -42,3 +42,6 @@ npm i formik yup
 ## Formik use
 
 It's used to handle values forms
+
+## Installing apollo from client and fetch library to connect with server
+npm i @apollo/client node-fetch
