@@ -2,29 +2,24 @@ import React from 'react';
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useQuery, gql } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 
-const QUERY = gql `
-    query obtenerProductos {
-        obtenerProductos {
+
+const NUEVA_CUENTA = gql `
+mutation nuevoUsuario($input: UsuarioInput) {
+    nuevoUsuario(input: $input){
         id
         nombre
-        stock
-        price
-        creado
-        }
+        apellido
+        email
     }
+  }
 `;
 
 const NuevaCuenta = () => {
 
-    // Obtener productos de Graphql
-    const { data, loading, error } = useQuery(QUERY);
-
-    console.log(data);
-    console.log(loading);
-    console.log(error);
-    
+    // Mutation para crear nuevos usuarios 
+    const [ nuevoUsuario ] = useMutation(NUEVA_CUENTA);
 
     // Validación del formulario
     const formik = useFormik({
@@ -46,13 +41,38 @@ const NuevaCuenta = () => {
                          .required('El Password no puede ir vacio')
                          .min(6, 'El password debe tener mínimo 6 caracteres')
         }),
-        onSubmit: valores => {
-            console.log('enviando');
-            console.log(valores);            
+        onSubmit: async valores => {
+            // console.log('enviando');
+            // console.log(valores);   
+
+            const { nombre, apellido, email, password } = valores;
+            
+            try {
+                const { data } = await nuevoUsuario({
+                    variables : {
+                        input : {
+                            nombre,
+                            apellido,
+                            email,
+                            password
+                        }
+                    }
+                });
+                console.log(data);
+                
+                // Usuario creado correctamente
+
+
+                // Redirigir usuario para iniciar sesión
+                
+
+            } catch (error) {
+                console.log(error);                
+            }
         }
     });
 
-    if (loading) return "Cargando..."
+    // if (loading) return "Cargando..."
 
     return ( 
         <>
