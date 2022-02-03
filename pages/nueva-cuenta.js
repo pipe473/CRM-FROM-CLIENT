@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -23,6 +24,9 @@ const NuevaCuenta = () => {
 
     // Mutation para crear nuevos usuarios 
     const [ nuevoUsuario ] = useMutation(NUEVA_CUENTA);
+
+    // Routing 
+    const router = useRouter();
 
     // Validación del formulario
     const formik = useFormik({
@@ -64,6 +68,12 @@ const NuevaCuenta = () => {
                 console.log(data);
                 
                 // Usuario creado correctamente
+                saveMessage(`Se ha creado el usuario: ${data.nuevoUsuario.nombre}`)
+
+                setTimeout(() => {
+                    saveMessage(null);
+                    router.push('/login')
+                }, 3000);
 
 
                 // Redirigir usuario para iniciar sesión
@@ -92,7 +102,6 @@ const NuevaCuenta = () => {
     return ( 
         <>
             <Layout>
-
                 { message && showMessage() }
 
                 <h1 className="text-center text-2xl text-white font-light">Crear Nueva Cuenta</h1>
