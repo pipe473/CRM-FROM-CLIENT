@@ -72,7 +72,7 @@ const NuevaCuenta = () => {
 
                 setTimeout(() => {
                     saveMessage(null);
-                    router.push('/login')
+                    router.push('/login');
                 }, 3000);
 
 
