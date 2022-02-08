@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { gql, useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 const AUTH_USER = gql `
 mutation autenticarUsuario($input: AutenticarInput){
@@ -14,6 +15,10 @@ mutation autenticarUsuario($input: AutenticarInput){
 
 
 const Login = () => {
+
+    const router = useRouter();
+
+    const [ mensaje, guardarMersaje ] = useState(null);
 
     // Mutation para crear nuevos usuarios en Apollo
     const [ autenticarUsuario ] = useMutation(AUTH_USER);
@@ -44,17 +49,47 @@ const Login = () => {
                         }
                     }
                 });
-                console.log(data);                
+                console.log(data);      
+                guardarMersaje('Autenticando...');
+                
+                // Guardar el token el localStorage
+                const { token } = data.autenticarUsuario;
+                localStorage.setItem('token', token);
+
+                // Redireccionar hacia clientes
+                setTimeout(() => {
+                    guardarMersaje(null);
+                    router.push('/');
+                }, 3000);
+
+
             } catch (error) {
-                console.log(error);                
+                guardarMersaje(error.message)
+                // console.log(error);   
+                
+                setTimeout(() => {
+                    guardarMersaje(null);
+                    
+                }, 3000);
             }
         }
     });
+
+    const mostrarMensaje = () => {
+        return (
+            <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto" > 
+                <p>{ mensaje }</p>
+            </div>
+        )
+    }
 
     return ( 
         <>
             <Layout>
                 <h1 className="text-center text-2xl text-white font-light">Login</h1>
+
+                { mensaje && mostrarMensaje() }
+
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-sm">
                         <form
