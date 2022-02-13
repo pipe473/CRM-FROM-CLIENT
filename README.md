@@ -47,3 +47,8 @@ It's used to handle values forms
 1. npm i @apollo/client node-fetch
 
 2. npm i graphql
+
+
+# npm i apollo-link-context
+
+1. Installing dependencies to save token securized
