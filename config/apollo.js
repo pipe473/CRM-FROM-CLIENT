@@ -9,11 +9,13 @@ const authTokenLink = setContext((_, { headers }) => {
 
     // Leer el storage almacenado
     const token = localStorage.getItem('token');
+    // console.log(token);
+    
 
     return {
         headers: {
             ...headers,
-            authotization: token ? `Bearer ${token}` : ''
+            authorization: token ? `Bearer ${token}` : ''
             // miPropioHeader: 'Hola mi header!!'
         }
     }
