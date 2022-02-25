@@ -52,3 +52,8 @@ It's used to handle values forms
 # npm i apollo-link-context
 
 1. Installing dependencies to save token securized
+
+
+# npm i sweetalert2
+
+1. Installing sweet alert for alert messages
