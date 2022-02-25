@@ -18,13 +18,38 @@ const NUEVO_CLIENTE = gql`
   }
 `;
 
+const GET_CLIENTS_USER = gql`
+  query getCustomerSeller {
+    getCustomerSeller {
+      id
+      nombre
+      apellido
+      empresa
+      email
+    }
+  }
+`;
+
 const nuevoCliente = () => {
 
   const router = useRouter();
 
 // Mutation para crear nuevos clientes
 
-const [ newCustomer ] = useMutation(NUEVO_CLIENTE)
+const [ newCustomer ] = useMutation( NUEVO_CLIENTE, {
+  update(cache, { data: { newCustomer }}){
+    // Obtener el objeto de cache que deseamos actualizar
+    const {  getCustomerSeller } = cache.readQuery({ query: GET_CLIENTS_USER });
+
+    // Reescribimos el cache( el cache nunca se debe modificar )
+    cache.writeQuery({
+      query: GET_CLIENTS_USER,
+      data: {
+        getCustomerSeller : [ ...getCustomerSeller, newCustomer ]
+      }
+    })
+  }
+} )
 
   const formik = useFormik({
     initialValues: {
