@@ -8,9 +8,35 @@ const DELETE_CLIENT = gql`
   }
 `;
 
+
+const GET_CLIENTS_USER = gql`
+  query getCustomerSeller {
+    getCustomerSeller {
+      id
+      nombre
+      apellido
+      empresa
+      email
+    }
+  }
+`;
+
 const Customer = ({ customer }) => {
   // Mutation para eliminar cliente
-  const [deleteCustomer] = useMutation(DELETE_CLIENT);
+  const [deleteCustomer] = useMutation(DELETE_CLIENT, {
+      update(cache){
+        // Obtener una copia del objeto de cache
+        const { getCustomerSeller } = cache.readQuery({ query: GET_CLIENTS_USER });
+
+        // Reescribir cache
+        cache.writeQuery({
+            query: GET_CLIENTS_USER ,
+            data: {
+                getCustomerSeller: getCustomerSeller.filter( clienteActual => clienteActual.id != id)
+            }
+        })
+      }
+  } );
 
   const { nombre, apellido, empresa, email, id } = customer;
 
