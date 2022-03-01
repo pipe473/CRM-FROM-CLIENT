@@ -1,14 +1,13 @@
 import React from "react";
 import Swal from "sweetalert2";
 import { gql, useMutation } from "@apollo/client";
-import Router  from 'next/router';
+import Router from "next/router";
 
 const DELETE_CLIENT = gql`
   mutation deleteCustomer($id: ID!) {
     deleteCustomer(id: $id)
   }
 `;
-
 
 const GET_CLIENTS_USER = gql`
   query getCustomerSeller {
@@ -25,19 +24,23 @@ const GET_CLIENTS_USER = gql`
 const Customer = ({ customer }) => {
   // Mutation para eliminar cliente
   const [deleteCustomer] = useMutation(DELETE_CLIENT, {
-      update(cache){
-        // Obtener una copia del objeto de cache
-        const { getCustomerSeller } = cache.readQuery({ query: GET_CLIENTS_USER });
+    update(cache) {
+      // Obtener una copia del objeto de cache
+      const { getCustomerSeller } = cache.readQuery({
+        query: GET_CLIENTS_USER,
+      });
 
-        // Reescribir cache
-        cache.writeQuery({
-            query: GET_CLIENTS_USER ,
-            data: {
-                getCustomerSeller: getCustomerSeller.filter( clienteActual => clienteActual.id != id)
-            }
-        })
-      }
-  } );
+      // Reescribir cache
+      cache.writeQuery({
+        query: GET_CLIENTS_USER,
+        data: {
+          getCustomerSeller: getCustomerSeller.filter(
+            (clienteActual) => clienteActual.id != id
+          ),
+        },
+      });
+    },
+  });
 
   const { nombre, apellido, empresa, email, id } = customer;
 
@@ -59,7 +62,7 @@ const Customer = ({ customer }) => {
           // Eliminar por id
           const { data } = await deleteCustomer({
             variables: {
-              id
+              id,
             },
           });
           console.log(data);
@@ -75,10 +78,10 @@ const Customer = ({ customer }) => {
 
   const editarCliente = () => {
     Router.push({
-        pathname: "/editarcliente/[id]",
-        query: { id }
-    })
-  }
+      pathname: "/editarcliente/[id]",
+      query: { id },
+    });
+  };
 
   return (
     <tr>
@@ -128,7 +131,7 @@ const Customer = ({ customer }) => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
             />
           </svg>
         </button>
