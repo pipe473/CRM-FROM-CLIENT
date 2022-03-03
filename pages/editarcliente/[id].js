@@ -46,7 +46,9 @@ const EditarCliente = () => {
 
   if (loading) return "Cargando...";
 
-  console.log(data.getCustomer);
+//   console.log(data.getCustomer);
+
+  const { getCustomer } = data;
 
   return (
     <Layout>
@@ -56,9 +58,14 @@ const EditarCliente = () => {
         <div className="w-full max-w-lg">
           <Formik
             validationSchema={schemaValidacion}
+            enableReinitialize
+            initialValues={ getCustomer }
+            onSubmit={ ( values ) => {
+                console.log(values);                             
+            }}
           >
             {(props) => {
-              console.log(props);
+            //   console.log(props);
 
               return (
                 <form
@@ -79,7 +86,7 @@ const EditarCliente = () => {
                       placeholder="Nombre Cliente"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
-                      // value={formik.values.nombre}
+                      value={props.values.nombre}
                     />
                   </div>
 
@@ -104,7 +111,7 @@ const EditarCliente = () => {
                       placeholder="Apellido Cliente"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
-                      // value={formik.values.apellido}
+                      value={props.values.apellido}
                     />
                   </div>
 
@@ -129,7 +136,7 @@ const EditarCliente = () => {
                       placeholder="Empresa Cliente"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
-                      // value={formik.values.empresa}
+                      value={props.values.empresa}
                     />
                   </div>
 
@@ -154,7 +161,7 @@ const EditarCliente = () => {
                       placeholder="Empresa Cliente"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
-                      // value={formik.values.email}
+                      value={props.values.email}
                     />
                   </div>
 
@@ -179,7 +186,7 @@ const EditarCliente = () => {
                       placeholder="Teléfono Cliente"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
-                      // value={formik.values.telefono}
+                      value={props.values.telefono}
                     />
                   </div>
 
@@ -193,7 +200,7 @@ const EditarCliente = () => {
                   <input
                     type="submit"
                     className="bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900"
-                    value="Registrar Cliente"
+                    value="Editar Cliente"
                   />
                 </form>
               );
