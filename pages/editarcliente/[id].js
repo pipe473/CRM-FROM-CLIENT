@@ -1,9 +1,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Layout from "../../components/Layout";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql, useMutation } from "@apollo/client";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 
 const OBTENER_CLIENTE = gql`
   query getCustomer($id: ID!) {
@@ -15,6 +16,18 @@ const OBTENER_CLIENTE = gql`
       empresa
     }
   }
+`;
+
+const ACTUALIZAR_CLIENTE = gql`
+    mutation updateCustomer($id: ID!, $input: CustomerInput) {
+        updateCustomer(id: $id, input: $input) {
+        nombre
+        apellido
+        empresa
+        email
+        telefono
+        }
+    }
 `;
 
 const EditarCliente = () => {
@@ -30,9 +43,12 @@ const EditarCliente = () => {
   // Consultar para obtener cliente
   const { data, loading, error } = useQuery(OBTENER_CLIENTE, {
     variables: {
-      id,
+      id
     },
   });
+
+  // Actualizar el cliente
+  const [ updateCustomer ] = useMutation( ACTUALIZAR_CLIENTE );
 
   // Schema de validación
   const schemaValidacion = Yup.object({
@@ -50,6 +66,37 @@ const EditarCliente = () => {
 
   const { getCustomer } = data;
 
+  // Modifica el cliente en la DB
+  const actualizarInfoCliente = async values =>{
+    const { nombre, apellido, empresa, email, telefono } = values;
+
+    try {
+        const { data } = await updateCustomer({
+            variables: {
+                id: id,
+                input: {
+                    nombre,
+                    apellido,
+                    empresa,
+                    email,
+                    telefono
+                }
+            }
+        });
+        // console.log(data);
+
+         // Sweet alert
+         Swal.fire("Actualizado", 'Cliente actualizado correctamente', "success");
+         
+
+        // Redireccionar
+        router.push('/');
+        
+    } catch (error) {
+        console.log(error);        
+    }
+  }
+
   return (
     <Layout>
       <h1 className="text-2xl text-gray-800 font-light">Editar cliente</h1>
@@ -61,12 +108,11 @@ const EditarCliente = () => {
             enableReinitialize
             initialValues={ getCustomer }
             onSubmit={ ( values ) => {
-                console.log(values);                             
+                actualizarInfoCliente(values);                             
             }}
           >
             {(props) => {
             //   console.log(props);
-
               return (
                 <form
                   className="bg-white shadow-md px-8 pt-6 pb-8 mb-4"
