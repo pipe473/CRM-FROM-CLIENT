@@ -65,7 +65,7 @@ const Customer = ({ customer }) => {
               id,
             },
           });
-          console.log(data);
+        //   console.log(data);
 
           // Mostrar alerta
           Swal.fire("Eliminado!", data.deleteCustomer, "success");
