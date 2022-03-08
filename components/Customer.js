@@ -22,8 +22,10 @@ const GET_CLIENTS_USER = gql`
 `;
 
 const Customer = ({ customer }) => {
+const { nombre, apellido, empresa, email, id } = customer;
+
   // Mutation para eliminar cliente
-  const [deleteCustomer] = useMutation(DELETE_CLIENT, {
+  const [ deleteCustomer ] = useMutation(DELETE_CLIENT, {
     update(cache) {
       // Obtener una copia del objeto de cache
       const { getCustomerSeller } = cache.readQuery({
@@ -35,17 +37,17 @@ const Customer = ({ customer }) => {
         query: GET_CLIENTS_USER,
         data: {
           getCustomerSeller: getCustomerSeller.filter(
-            (clienteActual) => clienteActual.id != id
+            clienteActual => clienteActual.id !== id
           ),
         },
       });
     },
   });
 
-  const { nombre, apellido, empresa, email, id } = customer;
+
 
   // Eliminar un cliente
-  const confirmarEliminarCliente = (id) => {
+  const confirmarEliminarCliente = () => {
     Swal.fire({
       title: "¿Deseas eliminar a este cliente?",
       text: "Esta acción no se puede deshacer!",
@@ -62,7 +64,7 @@ const Customer = ({ customer }) => {
           // Eliminar por id
           const { data } = await deleteCustomer({
             variables: {
-              id,
+              id
             },
           });
         //   console.log(data);
