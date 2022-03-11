@@ -2,15 +2,35 @@ import React from "react";
 import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { gql, useMutation } from '@apollo/client';
+import Swal from "sweetalert2";
+import { useRouter } from 'next/router';
+
+const NUEVO_PRODUCTO = gql`
+    mutation nuevoProducto($input: ProductoInput){
+        nuevoProducto(input: $input){
+            id
+            nombre
+            stock
+            price
+        }
+    }
+`;
 
 const NuevoProducto = () => {
+
+// routing
+const router = useRouter();
+
+// Mutation de apollo
+const [nuevoProducto] = useMutation(NUEVO_PRODUCTO);
 
 // Formulario para nuevos productos
 const formik = useFormik({
     initialValues: {
         nombre: '',
         stock: '',
-        precio: ''
+        price: ''
     },
     validationSchema: Yup.object({
         nombre: Yup.string()
@@ -19,12 +39,36 @@ const formik = useFormik({
                   .required('Añade la cantidad disponible')
                   .positive('No se aceptan números negativos')
                   .integer('El stock debe ser con números enteros'),
-        precio: Yup.number()
+        price: Yup.number()
                     .required('El precio es obligatorio')
                     .positive('No se aceptan números negativos')
     }),
     onSubmit: async val => {
+        const { nombre, stock, price } = val;
+        try {
+            const { data } = await nuevoProducto({
+                variables: {
+                    input: {
+                        nombre,
+                        stock,
+                        price 
+                    }
+                }
+            });
+            // console.log(data);   
 
+            // Mostrar mensaje de alerta
+            Swal.fire(
+                'Creado',
+                'Se creó el producto correctamente!!',
+                'success'
+            )
+            
+            // Redireccionar hacia los productos
+            router.push('/productos');
+        } catch (error) {
+            console.log(error);            
+        }
     }
 })
 
@@ -89,24 +133,24 @@ const formik = useFormik({
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="precio"
+                htmlFor="price"
               >
                 Precio
               </label>
               <input
                 className="shadow appareance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="precio"
+                id="price"
                 type="number"
                 placeholder="Precio Producto"
                  onChange={formik.handleChange}
                  onBlur={formik.handleBlur}
-                 value={formik.values.precio}
+                 value={formik.values.price}
               />
             </div>
-            {formik.touched.precio && formik.errors.precio ? (
+            {formik.touched.price && formik.errors.price ? (
               <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
                 <p className="font-bold">Error</p>
-                <p>{formik.errors.precio}</p>
+                <p>{formik.errors.price}</p>
               </div>
             ) : null}
               <input
