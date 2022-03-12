@@ -1,9 +1,10 @@
 import React from "react";
 import Layout from "../../components/Layout";
 import { useRouter } from "next/router";
-import { gql, useQuery } from "@apollo/client";
-import { useFormik, Formik } from "formik";
+import { gql, useQuery, useMutation } from "@apollo/client";
+import {  Formik } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 
 const GET_PRODUCT = gql`
   query getProductById($id: ID!) {
@@ -11,6 +12,17 @@ const GET_PRODUCT = gql`
       nombre
       price
       stock
+    }
+  }
+`;
+
+const UPDATE_PRODUCTS = gql`
+mutation actualizarProducto($id: ID!, $input: ProductoInput){
+  actualizarProducto(id :$id, input: $input){
+      id
+      nombre
+      stock
+      price
     }
   }
 `;
@@ -28,6 +40,8 @@ const EditarProducto = () => {
       id,
     },
   });
+
+  const [ actualizarProducto ] = useMutation(UPDATE_PRODUCTS);
 
   // Schema de validación
   const schemaValidation = Yup.object({
@@ -48,8 +62,41 @@ const EditarProducto = () => {
 
   if (loading) return "Cargando...";
 
-  const updateInfoProduct = values => {
-    console.log(values);    
+  if(!data) return "Acción no permitida!!"
+
+  const updateInfoProduct = async values => {
+    // console.log(values);    
+    const { nombre, stock, price } = values;
+
+    try {
+      const { data } = await actualizarProducto({
+        variables: {
+          id,
+          input: {
+            nombre,
+            stock,
+            price
+          }
+        }
+      })
+
+      // console.log(data);
+
+      // Redirigir hacia productos
+      router.push('/productos');
+
+      // Mostrar alerta
+      Swal.fire(
+        'Correcto',
+        'Producto actualizado correctamente!!',
+        'success'
+      )
+      
+      
+    } catch (error) {
+      console.log(error);      
+    }
+
   }
 
     const { getProductById } = data;
