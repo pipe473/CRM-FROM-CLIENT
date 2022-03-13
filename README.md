@@ -57,3 +57,6 @@ It's used to handle values forms
 # npm i sweetalert2
 
 1. Installing sweet alert for alert messages
+
+# Installing React Select library
+npm i react-select
