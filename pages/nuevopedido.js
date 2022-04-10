@@ -10,6 +10,8 @@ const NuevoPedido = () => {
             <h1 className="text-2xl text-gray-800 font-light">Crear nuevo pedido</h1>
 
             <ClientAsigned />
+            <ClientAsigned />
+            <ClientAsigned />
         </Layout>
 
      );
