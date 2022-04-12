@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Select from 'react-select';
 import { gql, useQuery } from '@apollo/client';
+import PedidoContext from '../../context/pedidos/PedidoContext';
 
 const GET_CLIENTS_USER = gql`
   query getCustomerSeller {
@@ -15,7 +16,15 @@ const GET_CLIENTS_USER = gql`
 `;
 
 const ClientAsigned = () => {
+
     const [ client, setClient ] = useState([]);
+
+    // Context de pedidos
+    const pedidoContext = useContext(PedidoContext);
+    // console.log(pedidoContext);
+
+    const { addClient } = pedidoContext;
+    
 
     // Consultar la base de datos
     const { data, loading, error } = useQuery(GET_CLIENTS_USER);
@@ -26,7 +35,8 @@ const ClientAsigned = () => {
     
 
     useEffect(() => {
-        console.log(client);        
+        // console.log(client);       
+        addClient(client); 
     }, [client])
 
     const selectClient = clients => {
