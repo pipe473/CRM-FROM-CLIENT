@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import Layout from '../components/Layout';
 import ClientAsigned from '../components/pedidos/ClientAsigned';
+import AsignProduct from '../components/pedidos/AsignProduct';
 
 // Context de pedidos
 import PedidoContext from '../context/pedidos/PedidoContext';
@@ -17,6 +18,7 @@ const NuevoPedido = () => {
             <h1 className="text-2xl text-gray-800 font-light">Crear nuevo pedido</h1>
 
             <ClientAsigned />
+            <AsignProduct />
         </Layout>
 
      );
