@@ -34,12 +34,13 @@ const PedidoState = ({children}) => {
             type: SELECT_PRODUCT,
             payload: products
         })
-        console.log(products);        
+        // console.log(products);        
     }
 
     return ( 
         <PedidoContext.Provider        
             value={{
+                productos: state.products,
                 addClient,
                 addProduct
             }}
