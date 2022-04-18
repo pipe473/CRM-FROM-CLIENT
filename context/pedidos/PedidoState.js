@@ -5,7 +5,8 @@ import PedidoReducer from './PedidoReducer';
 import {
     SELECT_CUSTOMER,
     SELECT_PRODUCT,
-    PRODUCTS_QUANTIY
+    PRODUCTS_QUANTIY,
+    UPDATE_TOTAL
 } from '../../types'
 
 const PedidoState = ({children}) => {
@@ -33,10 +34,12 @@ const PedidoState = ({children}) => {
 
         let nuevoState;
  
-        if(state.products.lenght > 0 ) {
+        if(state.products.length > 0 ) {
             // Tomar del segundo arreglo, una copia para asignarlo al primero
             nuevoState = productosSeleccionados.map( productoSeleccionado => {
                 const newObject = state.products.find( productoState => productoState.id === productoSeleccionado.id )
+                console.log(newObject);
+                
                 return{ ...productoSeleccionado, ...newObject }
             })
         } else {
@@ -57,13 +60,21 @@ const PedidoState = ({children}) => {
         })     
     }
 
+    const totalUpdate = () => {
+        dispatch({
+            type: UPDATE_TOTAL
+        })      
+    }
+
     return ( 
         <PedidoContext.Provider        
             value={{
                 productos: state.products,
+                total: state.total,
                 addClient,
                 addProduct,
-                quantityProducts
+                quantityProducts,
+                totalUpdate
             }}
         > {children}
         </PedidoContext.Provider>

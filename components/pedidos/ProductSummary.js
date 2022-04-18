@@ -5,7 +5,7 @@ const ProductSummary = ({ producto }) => {
 
     // Context de pedidos
     const pedidoContext = useContext(PedidoContext);  
-    const { quantityProducts } = pedidoContext;
+    const { quantityProducts, totalUpdate } = pedidoContext;
 
 
     const [ summaryQty, setQty ] = useState(0);
@@ -14,6 +14,7 @@ const ProductSummary = ({ producto }) => {
 
     useEffect(() => {
         updateQty();
+        totalUpdate();
     }, [ summaryQty ])
 
     const updateQty = () => {
