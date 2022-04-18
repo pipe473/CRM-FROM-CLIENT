@@ -28,21 +28,33 @@ const PedidoState = ({children}) => {
         })
     }
 
+    // Modifica los productos
+    const addProduct = productosSeleccionados => {
+
+        let nuevoState;
+ 
+        if(state.products.lenght > 0 ) {
+            // Tomar del segundo arreglo, una copia para asignarlo al primero
+            nuevoState = productosSeleccionados.map( productoSeleccionado => {
+                const newObject = state.products.find( productoState => productoState.id === productoSeleccionado.id )
+                return{ ...productoSeleccionado, ...newObject }
+            })
+        } else {
+            nuevoState = productosSeleccionados;
+        }       
+         dispatch({
+             type: SELECT_PRODUCT,
+             payload: nuevoState
+         })
+         // console.log(products);        
+     }
+
     // Modifica las cantidades de los productos
     const quantityProducts = newProduct => {
         dispatch({
             type: PRODUCTS_QUANTIY,
             payload: newProduct
         })     
-    }
-
-    // Modifica los productos
-    const addProduct = products => {
-        dispatch({
-            type: SELECT_PRODUCT,
-            payload: products
-        })
-        // console.log(products);        
     }
 
     return ( 
