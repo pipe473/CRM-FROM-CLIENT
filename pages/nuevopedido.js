@@ -3,6 +3,7 @@ import Layout from '../components/Layout';
 import ClientAsigned from '../components/pedidos/ClientAsigned';
 import AsignProduct from '../components/pedidos/AsignProduct';
 import OrderSummary from '../components/pedidos/OrderSummary';
+import Total from '../components/pedidos/Total';
 
 // Context de pedidos
 import PedidoContext from '../context/pedidos/PedidoContext';
@@ -22,6 +23,13 @@ const NuevoPedido = () => {
                 <ClientAsigned />
                 <AsignProduct />
                 <OrderSummary />
+                <Total />
+
+                <button
+                    type="button"
+                    className={`bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900`}
+                >Registrar pedido
+                </button>
                 </div>
             </div>            
         </Layout>
