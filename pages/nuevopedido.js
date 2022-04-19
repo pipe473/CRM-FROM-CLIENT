@@ -13,6 +13,12 @@ const NuevoPedido = () => {
 
     // Utilizar context y extraer sus funciones y valores
     const pedidoContext = useContext(PedidoContext);
+
+    const { cliente, productos, total } = pedidoContext;
+
+    const OrderValidate = () => {
+        return !productos.every( producto => producto.quantity > 0 ) || total === 0 || cliente.length === 0 ? " opacity-50 cursor-not-allowed " : "   ";
+    }
     
    
     return ( 
@@ -27,7 +33,7 @@ const NuevoPedido = () => {
 
                 <button
                     type="button"
-                    className={`bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900`}
+                    className={`bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900 ${OrderValidate() }`}
                 >Registrar pedido
                 </button>
                 </div>
