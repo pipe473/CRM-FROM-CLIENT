@@ -8,18 +8,30 @@ const Pedido = ({ order }) => {
     console.log(order);    
 
     const [ estadoPedido, setEstadoPedido  ]= useState(estado);
+    const [ clase, setClase  ]= useState('');
     
     useEffect(() => {
         if(estadoPedido) {
           setEstadoPedido(estadoPedido);
         }
+        clasePedido();
     }, [ estadoPedido ]);
 
-    console.log(estadoPedido);
-    
+    // console.log(estadoPedido);
+
+    // Función que modifica el color del pedido de acuerdo a su estado
+    const clasePedido = () => {
+        if (estadoPedido === 'PENDIENTE') {
+            setClase('border-yellow-500')
+        } else if (estadoPedido === 'COMPLETE') {
+            setClase('border-green-500')
+        } else {
+            setClase('border-red-800')
+        }
+    }    
 
     return ( 
-       <div className="mt-4 bg-white rounded p-6 md:grid md:grid-cols-2 md:gap-4 shadow-lg">
+       <div className={` ${clase} border-t-4 mt-4 bg-white rounded p-6 md:grid md:grid-cols-2 md:gap-4 shadow-lg`}>
            <div>
                 <p className="font-bold text-gray-800">Cliente: { nombre } { apellido }</p>
 
@@ -82,7 +94,7 @@ const Pedido = ({ order }) => {
                 ) ) }
 
                 <p className="text-gray-800 mt-3 font-bold">Total a pagar:
-                    <span className="font-light">{total}€</span>
+                    <span className="font-light"> {total}€</span>
                 </p>
                 <button
                     className="uppercase text-xs font-bold flex items-center mt-4 bg-red-800 px-5 py-2 inline-block text-white rounded leading-tight"
