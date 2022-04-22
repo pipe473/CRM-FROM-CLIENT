@@ -11,6 +11,7 @@ const OBTENER_PEDIDOS = gql`
       order {
         id
         quantity
+        nombre
       }
       cliente
       vendedor
