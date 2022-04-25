@@ -19,6 +19,7 @@ const OBTENER_PEDIDOS = gql`
         empresa
         email
         telefono
+        id
       }
       vendedor
       total
