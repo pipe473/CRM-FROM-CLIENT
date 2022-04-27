@@ -20,6 +20,31 @@ const NUEVO_PEDIDO = gql`
 `; 
 
 
+const OBTENER_PEDIDOS = gql`
+  query getOrdersBySeller {
+    getOrdersBySeller {
+      id
+      order {
+        id
+        quantity
+        nombre
+      }
+      cliente {
+        nombre
+        apellido
+        empresa
+        email
+        telefono
+        id
+      }
+      vendedor
+      total
+      estado
+    }
+  }
+`;
+
+
 const NuevoPedido = () => {
 
     const router = useRouter();
@@ -35,7 +60,20 @@ const NuevoPedido = () => {
   
 
     // Mutation para crear nuevo pedido
-    const [ newOrder ] = useMutation( NUEVO_PEDIDO );
+    const [ newOrder ] = useMutation( NUEVO_PEDIDO, {
+        update(cache, { data: { newOrder }} ) {
+            const { getOrdersBySeller } = cache.readQuery({
+                query: OBTENER_PEDIDOS 
+            });
+
+            cache.writeQuery({
+                query: OBTENER_PEDIDOS,
+                data: { 
+                    getOrdersBySeller: [ ...getOrdersBySeller, newOrder ]
+                } 
+            })
+        }
+    } );
 
 
     const OrderValidate = () => {
