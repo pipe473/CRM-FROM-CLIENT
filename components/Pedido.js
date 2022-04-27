@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import Swal from "sweetalert2";
 
 
@@ -17,6 +17,14 @@ const ELIMINAR_PEDIDO = gql `
     }
 `;
 
+const OBTENER_PEDIDOS = gql`
+  query getOrdersBySeller {
+    getOrdersBySeller {
+      id
+    }
+  }
+`;
+
 
 const Pedido = ({ order }) => {
 
@@ -28,7 +36,20 @@ const Pedido = ({ order }) => {
     // Mutation para cambiar el estado de un pedido
     const [ updateOrder ] = useMutation(ACTUALIZAR_PEDIDO);
 
-    const [ deleteOrder ] = useMutation(ELIMINAR_PEDIDO);
+    const [ deleteOrder ] = useMutation(ELIMINAR_PEDIDO, {
+        update(cache) {
+            const { getOrdersBySeller } = cache.readQuery({
+                query: OBTENER_PEDIDOS
+            });
+
+            cache.writeQuery({
+                query: OBTENER_PEDIDOS,
+                data: {
+                    getOrdersBySeller: getOrdersBySeller.filter( order => order.id !== id )
+                }
+            })
+        }
+    });
 
     console.log(order);    
 
