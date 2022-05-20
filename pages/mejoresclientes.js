@@ -49,8 +49,8 @@ const MejoresClientes = () => {
     return ( 
         <Layout>
              <h1 className="text-2xl text-gray-800 font-light">Mejores Clientes</h1>
-             <ResponsiveContainer width="50%" height="50%">
-                <BarChart width={400} height={600} data={graphCustomer} margin={{top: 5, right:30, left: 20, bottom: 5}}>
+             <ResponsiveContainer width={'99%'} height={550}>
+                <BarChart width={600} height={500} data={graphCustomer} margin={{top: 5, right:30, left: 20, bottom: 5}}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="nombre" />
                 <YAxis />

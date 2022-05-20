@@ -38,9 +38,9 @@ const Header = () => {
     }
 
     return ( 
-        <div className="flex justify-between mb-6">
+        <div className="sm:flex sm:justify-between mb-6">
             <div className="justify-start">
-            <p className="mr-2">Hola: { nombre } { apellido }</p>
+            <p className="mr-2 mb-5 lg:mb-0">Hola: { nombre } { apellido }</p>
             </div>
             <div className="justify-end">
                 <button 

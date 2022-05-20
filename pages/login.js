@@ -53,14 +53,16 @@ const Login = () => {
                 guardarMersaje('Autenticando...');
                 
                 // Guardar el token el localStorage
-                const { token } = data.autenticarUsuario;
-                localStorage.setItem('token', token);
+                setTimeout(() => {                    
+                    const { token } = data.autenticarUsuario;
+                    localStorage.setItem('token', token);
+                }, 1000);
 
                 // Redireccionar hacia clientes
                 setTimeout(() => {
                     guardarMersaje(null);
                     router.push('/');
-                }, 3000);
+                }, 2000);
 
 
             } catch (error) {
